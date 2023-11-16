@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">InputMask_Compose</string>
     <string name="phone_number">Phone Number</string>
+    <string name="bank_card">Bank Card</string>
 </resources>

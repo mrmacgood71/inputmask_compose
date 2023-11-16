@@ -94,7 +94,6 @@ dependencies {
 
 
     runtimeOnly("androidx.compose.ui:ui-util:1.5.4")
-    implementation("com.github.lincollincol:compose-audiowaveform:1.1.1")
 
 
     debugImplementation(libs.compose.ui.test.manifest)
