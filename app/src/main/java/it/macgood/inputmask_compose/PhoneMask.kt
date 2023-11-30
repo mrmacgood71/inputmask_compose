@@ -1,5 +1,6 @@
 package it.macgood.inputmask_compose
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -34,126 +35,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 
-@Composable
-fun ReservationTextField(
-    modifier: Modifier = Modifier,
-    value: String,
-    @StringRes resId: Int,
-    onValueChange: (String) -> Unit
-) {
-    TextField(
-        modifier = modifier
-            .fillMaxWidth(),
-        value = value,
-        onValueChange = { onValueChange(it) },
-        label = {
-            Text(
-                text = stringResource(id = resId)
-            )
-        },
-        maxLines = 1,
-        shape = RoundedCornerShape(8.dp),
-        textStyle = TextStyle.Default.copy(
-            color = Color.Black,
-            fontSize = 16.sp
-        )
-    )
+
+
+class BankMaskTransformation(
+    private var callback: (Int) -> Unit
+) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        return bankCardMaskFilter(text, callback)
+    }
+
 }
 
-@Composable
-fun PhoneTextField() {
-    var numberTemplate by remember { mutableStateOf("") }
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-        value = numberTemplate,
-        onValueChange = { it ->
-            numberTemplate = it.filter { it.isDigit() }.take(10)
-        },
-        label = {
-            Text(
-                text = stringResource(id = R.string.phone_number),
-            )
-        },
-        maxLines = 1,
-        shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        visualTransformation = PhoneMaskTransformation()
-    )
-}
-
-@Composable
-fun DateTextField() {
-    var numberTemplate by remember { mutableStateOf("") }
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-        value = numberTemplate,
-        onValueChange = { it ->
-            numberTemplate = it.filter { it.isDigit() }.take(8)
-        },
-        label = {
-            Text(
-                text = stringResource(id = R.string.phone_number),
-            )
-        },
-        maxLines = 1,
-        shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        visualTransformation = DateMaskTransformation()
-    )
-}
-
-@Composable
-fun BankCardTextField() {
-    var numberTemplate by remember { mutableStateOf("") }
-    Box(
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Image(
-            modifier = Modifier
-                .size(24.dp)
-                .padding(start = 4.dp, top = 12.dp)
-                .zIndex(2f),
-            painter = painterResource(id = R.drawable.ic_test),
-            contentDescription = null
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .zIndex(1f),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = numberTemplate,
-                onValueChange = { it ->
-                    numberTemplate = it.filter { it.isDigit() }.take(16)
-                },
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.phone_number),
-                    )
-                },
-                maxLines = 1,
-                shape = RoundedCornerShape(8.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                visualTransformation = BankMaskTransformation()
-            )
+class PhoneMaskTransformation(
+    private val country: String
+) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        when(country) {
+            "ru" -> {
+                return ruPhoneMaskFilterStars(text)
+            }
+            else -> {
+                return ruPhoneMaskFilterStars(text)
+            }
         }
-    }
-}
-
-class BankMaskTransformation : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        return bankCardMaskFilter(text)
-    }
-}
-
-class PhoneMaskTransformation : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        return ruPhoneMaskFilterStars(text)
     }
 }
 
@@ -164,29 +68,24 @@ class DateMaskTransformation : VisualTransformation {
     }
 }
 
-fun bankCardMaskFilter(text: AnnotatedString): TransformedText {
+fun bankCardMaskFilter(text: AnnotatedString, callback: (Int) -> Unit): TransformedText {
     val maxPhoneLength = 19
     val filteredText = text.text.take(maxPhoneLength)
-    var out = "                    "
-
+    val out = StringBuilder()
     for (i in filteredText.indices) {
-        when(i) {
-            0 -> {out = "${filteredText[0]}                   "}
-            1 -> {out = "${filteredText[0]}${filteredText[1]}                  "}
-            2 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}                 "}
-            3 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]}                "}
-            4 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}              "}
-            5 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}             "}
-            6 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}            "}
-            7 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]}           "}
-            8 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}         "}
-            9 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}        "}
-            10 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}       "}
-            11 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]}      "}
-            12 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}    "}
-            13 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}   "}
-            14 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}  "}
-            15 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}${filteredText[15]} "}
+        out.append(filteredText[i])
+        if (i % 4 == 3) {
+            Log.d("TAG", "bankCardMaskFilter: ${filteredText[i]}")
+            if (filteredText[i] == '5') {
+                callback(R.drawable.ic_mastercard)
+            } else if (filteredText[i] == '4') {
+                callback(R.drawable.ic_visa_icon)
+            } else if(filteredText[i] == '2') {
+                callback(R.drawable.ic_mir)
+            }
+
+
+            out.append(" ")
         }
     }
 
@@ -211,27 +110,32 @@ fun bankCardMaskFilter(text: AnnotatedString): TransformedText {
 fun bankCardMaskFilterUnderlines(text: AnnotatedString): TransformedText {
     val maxPhoneLength = 19
     val filteredText = text.text.take(maxPhoneLength)
-    var out = "____ ____ ____ ____ "
+//    var out = "____ ____ ____ ____ "
 
+//    for (i in filteredText.indices) {
+//        when(i) {
+//            0 -> {out = "${filteredText[0]}___ ____ ____ ____ "}
+//            1 -> {out = "${filteredText[0]}${filteredText[1]}__ ____ ____ ____ "}
+//            2 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}_ ____ ____ ____ "}
+//            3 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ____ ____ ____ "}
+//            4 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}___ ____ ____ "}
+//            5 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}__ ____ ____ "}
+//            6 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}_ ____ ____ "}
+//            7 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ____ ____ "}
+//            8 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}___ ____ "}
+//            9 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}__ ____ "}
+//            10 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}_ ____ "}
+//            11 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ____ "}
+//            12 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}___ "}
+//            13 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}__ "}
+//            14 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}_ "}
+//            15 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}${filteredText[15]} "}
+//        }
+//    }
+
+    val out = StringBuilder("____ ____ ____ ____ ")
     for (i in filteredText.indices) {
-        when(i) {
-            0 -> {out = "${filteredText[0]}___ ____ ____ ____ "}
-            1 -> {out = "${filteredText[0]}${filteredText[1]}__ ____ ____ ____ "}
-            2 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}_ ____ ____ ____ "}
-            3 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ____ ____ ____ "}
-            4 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}___ ____ ____ "}
-            5 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}__ ____ ____ "}
-            6 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}_ ____ ____ "}
-            7 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ____ ____ "}
-            8 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}___ ____ "}
-            9 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}__ ____ "}
-            10 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}_ ____ "}
-            11 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ____ "}
-            12 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}___ "}
-            13 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}__ "}
-            14 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}_ "}
-            15 -> {out = "${filteredText[0]}${filteredText[1]}${filteredText[2]}${filteredText[3]} ${filteredText[4]}${filteredText[5]}${filteredText[6]}${filteredText[7]} ${filteredText[8]}${filteredText[9]}${filteredText[10]}${filteredText[11]} ${filteredText[12]}${filteredText[13]}${filteredText[14]}${filteredText[15]} "}
-        }
+        out[i] = filteredText[i]
     }
 
     val numberOffsetTranslator = object : OffsetMapping {
