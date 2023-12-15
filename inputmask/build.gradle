@@ -97,7 +97,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'it.github.macgood'
+                groupId = 'com.github.macgood'
                 artifactId = 'inputmask_compose'
                 version = '1.0'
             }
