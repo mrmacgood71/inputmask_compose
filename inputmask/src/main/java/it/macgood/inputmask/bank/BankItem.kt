@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import it.macgood.inputmask_compose.R
+import it.macgood.inputmask.R
 
 enum class BankTextFieldStyle {
     NOTHING,

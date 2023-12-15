@@ -2,10 +2,8 @@ package it.macgood.inputmask.phone
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
@@ -28,9 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import it.macgood.inputmask_compose.R
-import it.macgood.inputmask.date.DateMaskTransformation
-import it.macgood.inputmask.date.DmyTextFieldStyle
+import it.macgood.inputmask.R
 import java.util.Locale
 
 @Composable

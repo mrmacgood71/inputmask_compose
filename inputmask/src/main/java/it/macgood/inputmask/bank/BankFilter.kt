@@ -5,7 +5,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import it.macgood.inputmask_compose.R
+import it.macgood.inputmask.R
 import it.macgood.inputmask.exceptions.NotBankCardNumberException
 
 class BankMaskTransformation(
