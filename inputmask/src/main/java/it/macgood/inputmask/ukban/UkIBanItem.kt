@@ -25,6 +25,7 @@ import it.macgood.inputmask.R
 fun UkIBanTextField(
     modifier: Modifier = Modifier,
     onSuccess: (String) -> Unit,
+    onValueChange: ((String) -> Unit)? = null,
     onError: (Exception) -> Unit,
     label: @Composable (() -> Unit)? = {
         Text(
@@ -56,6 +57,7 @@ fun UkIBanTextField(
         modifier = modifier,
         value = numberTemplate,
         onValueChange = { it ->
+            onValueChange?.invoke(it)
             numberTemplate = it.take(22)
         },
         label = label,

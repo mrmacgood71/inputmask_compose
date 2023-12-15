@@ -25,12 +25,14 @@ fun ukIBanMaskFilter(
 
     for (i in filteredText.indices) {
         out[when(i) {
-            in 0..1 -> i
-            in 2..3 -> {
-                if (filteredText[0].isDigit().and(filteredText[1].isDigit())) {
+            in 0..1 -> {
+                if (i == 1 && filteredText[0].isDigit().and(filteredText[1].isDigit())) {
                     onError(NotCountryCodeException())
-                    break
                 }
+                i
+            }
+            in 2..3 -> {
+
                 i + 1
             }
             in 4..7 -> i + 2

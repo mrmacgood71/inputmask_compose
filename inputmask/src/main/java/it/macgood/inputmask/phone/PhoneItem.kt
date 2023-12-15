@@ -1,5 +1,6 @@
 package it.macgood.inputmask.phone
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
@@ -54,8 +55,9 @@ fun PhoneTextField(
             painter = painterResource(id = when(systemLanguage) {
                 "ru" -> {R.drawable.ic_russia}
                 "en" -> {R.drawable.ic_usa}
+                "be" -> {R.drawable.ic_belarus}
                 "ge" -> {R.drawable.ic_germany}
-                else -> {R.drawable.ic_belarus}
+                else -> {R.drawable.ic_question}
             }),
             contentDescription = null
         )
@@ -77,11 +79,12 @@ fun PhoneTextField(
 ) {
     var numberTemplate by remember { mutableStateOf("") }
 
+
     TextField(
         modifier = modifier,
         value = numberTemplate,
         onValueChange = { it ->
-            numberTemplate = it.filter { it.isDigit() }.take(10)
+            numberTemplate = it.filter { it.isDigit() }.take(9)
         },
         label = label,
         leadingIcon = leadingIcon,

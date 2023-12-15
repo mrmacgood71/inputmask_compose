@@ -1,10 +1,8 @@
 package it.macgood.inputmask_compose
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,12 +16,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import it.macgood.inputmask.bank.BankCardStarsTextField
 import it.macgood.inputmask.bank.BankCardTextField
@@ -35,8 +38,8 @@ import it.macgood.inputmask.date.DateDmyUnderlineTextField
 import it.macgood.inputmask.ip.IpTextField
 import it.macgood.inputmask.passport.PassportTextField
 import it.macgood.inputmask.phone.PhoneTextField
-import it.macgood.inputmask_compose.ui.theme.InputMask_ComposeTheme
 import it.macgood.inputmask.ukban.UkIBanTextField
+import it.macgood.inputmask_compose.ui.theme.InputMask_ComposeTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -129,19 +132,24 @@ class MainActivity : ComponentActivity() {
                                 colors = TextFieldDefaults.colors(errorContainerColor = Color.Red)
 
                             )
-                            val scaffoldError = remember { mutableStateOf(false) }
+                            val context = LocalContext.current
+                            var message by remember {
+                                mutableStateOf(context.getString(R.string.iban))
+                            }
+                            var text by remember {
+                                mutableStateOf("")
+                            }
+
                             UkIBanTextField(
                                 modifier = Modifier.fillMaxWidth(),
+                                onValueChange = { text = it },
                                 onError = {
-                                    scope.launch {
-                                        if (!scaffoldError.value) {
-                                            snackbarHostState.showSnackbar("${it.message}")
-                                            scaffoldError.value = true
-                                        }
-
-                                    }
-
-                                }, onSuccess = {}
+                                    message = it.message ?: context.getString(R.string.iban)
+                                },
+                                label = {
+                                        Text(text = if (text.length > 1) message else context.getString(R.string.iban))
+                                },
+                                onSuccess = {}
                             )
                         }
                     }
