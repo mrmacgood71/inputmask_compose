@@ -1,4 +1,4 @@
-package it.macgood.inputmask_compose.phone
+package it.macgood.inputmask.phone
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

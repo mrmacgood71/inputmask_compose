@@ -120,4 +120,5 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.coil)
+    implementation(project(":inputmask"))
 }

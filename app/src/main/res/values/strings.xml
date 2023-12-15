@@ -4,6 +4,7 @@
     <string name="phone_number_ru">Номер телефона</string>
     <string name="bank_card">Bank Card</string>
     <string name="date">Date</string>
+    <string name="iban">IBAN</string>
     <string name="passport">Passport</string>
     <string name="ipv4">IPv4</string>
 </resources>

@@ -1,4 +1,4 @@
-package it.macgood.inputmask_compose.bank
+package it.macgood.inputmask.bank
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -44,7 +44,7 @@ enum class BankTextFieldStyle {
 fun BankCardTextField(
     modifier: Modifier = Modifier,
     onSuccess: (String) -> Unit,
-    onError: (Any) -> Unit,
+    onError: (Exception) -> Unit,
 
     label: @Composable (() -> Unit)? = {
         Text(

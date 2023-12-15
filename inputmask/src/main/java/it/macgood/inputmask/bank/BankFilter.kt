@@ -1,4 +1,4 @@
-package it.macgood.inputmask_compose.bank
+package it.macgood.inputmask.bank
 
 import android.util.Log
 import androidx.compose.ui.text.AnnotatedString
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import it.macgood.inputmask_compose.R
-import it.macgood.inputmask_compose.exceptions.NotBankCardNumberException
+import it.macgood.inputmask.exceptions.NotBankCardNumberException
 
 class BankMaskTransformation(
     private var onIconified: (Int) -> Unit,

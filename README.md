@@ -1,0 +1,1 @@
+This is a library of several frequently used data formats asked of the user, such as: phone number, passport details, bank card details and dates

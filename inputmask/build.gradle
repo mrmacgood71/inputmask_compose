@@ -1,0 +1,106 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin)
+    id 'maven-publish'
+}
+
+android {
+    namespace 'it.macgood.inputmask'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+}
+
+dependencies {
+
+    implementation libs.kotlin.core
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.lifecycle.viewmodel
+
+    implementation libs.compose.activity
+    implementation libs.compose.bom
+    implementation libs.compose.ui.ui
+    implementation libs.compose.ui.graphics
+    implementation libs.compose.ui.tooling.preview
+    implementation libs.compose.material3.material3
+    implementation libs.compose.foundation
+    implementation libs.compose.hilt.navigation
+    implementation libs.compose.runtime.livedata
+    implementation libs.paging.runtime
+    implementation libs.paging.compose
+    implementation libs.compose.runtime
+    implementation libs.compose.material.icons.core
+    implementation libs.compose.material.icons.ext
+    implementation libs.compose.accompanist.navigation
+    implementation libs.compose.accompanist.permissions
+    implementation libs.compose.accompanist.systemuicontroller
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
+
+    runtimeOnly "androidx.compose.ui:ui-util:1.5.4"
+
+
+    debugImplementation libs.compose.ui.test.manifest
+    debugImplementation libs.compose.ui.tooling
+
+    implementation libs.okhttp.logging.interceptor
+    implementation libs.converter.gson
+    implementation libs.okhttp.okhttp
+    implementation libs.retrofit
+
+    implementation libs.converter.scalars
+
+    implementation libs.kotlin.coroutines.android
+    implementation libs.kotlin.coroutines.core
+
+    implementation libs.coil.compose
+    implementation libs.coil.coil
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'it.github.macgood'
+                artifactId = 'inputmask_compose'
+                version = '1.0'
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-package it.macgood.inputmask_compose.date
+package it.macgood.inputmask.date
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

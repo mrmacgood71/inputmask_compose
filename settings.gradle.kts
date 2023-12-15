@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "InputMask_Compose"
 include(":app")
- 
+include(":inputmask_")
+include(":inputmask")
